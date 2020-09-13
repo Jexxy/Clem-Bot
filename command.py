@@ -1,13 +1,17 @@
 import discord
 import utilities
-import Main
 import os
 from discord.ext import commands
+bot = commands.Bot
 
 class Command(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
     
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'You connection with reddit is {utilities.reddit.read_only}')
+
     @commands.command()
     async def help(self, ctx):
         await ctx.send('''
@@ -72,12 +76,12 @@ class Command(commands.Cog):
 
     @commands.command()
     async def stats(self, ctx):
-        await ctx.send(utilities.create_stats())
+        await ctx.send(await utilities.create_stats())
 
     
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send('pong!!! *Happy bird noises*')
+        await ctx.send(f'pong!!! *Happy bird noises*')
 
 
     @commands.command()
@@ -94,16 +98,11 @@ class Command(commands.Cog):
 
     @commands.command()
     async def meme(self,ctx):
-        submission = Main.reddit.subreddit("memes").random()
-        image = submission.url
-        await ctx.send(image)
+        await ctx.send(await utilities.fetch_meme('memes'))
 
     @commands.command()
     async def dndmeme(self,ctx):
-        submission = Main.reddit.subreddit("dndmemes").random()
-        image = submission.url
-        await ctx.send(image)
-
+        await ctx.send(await utilities.fetch_meme('dndmemes'))
 
 def setup(bot):
     bot.add_cog(Command(bot))
