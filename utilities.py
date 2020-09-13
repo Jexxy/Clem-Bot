@@ -1,6 +1,19 @@
 import random
 import discord
 import discord.ext
+import praw
+##################################
+# Creating an instance of reddit #
+##################################
+# Gets the client secret from Redditsecret.txt, makes an instance of reddit
+
+t = open("Redditsecret", "r")
+client_secret1 = t.read()
+t.close
+reddit = praw.Reddit(client_id="k8NE3qqhrsUOCg",
+                     client_secret=client_secret1,
+                     user_agent="windows:Clem_Bot_Meme_Command:v0.1 (by /u/TheJexxyBoi):python3:PRAW")
+
 #############
 #Dice Roller#
 #############
@@ -18,7 +31,7 @@ async def roll_dice(inp1, ctx):
 #############
 #Stat roller#
 #############
-def roll_a_line():
+async def roll_a_line():
     #Establishes global variables
     stats = []
     iteration = 1
@@ -44,7 +57,7 @@ def roll_a_line():
     return stats
 
 #Creates, and formats the final list for the bot to send
-def create_stats():
+async def create_stats():
     current_list = []
     emp = []
     big_list = []
@@ -52,7 +65,7 @@ def create_stats():
     line_total = []
     for i in range(6):
         i+1 #this line doesn nothing, its here just for the IDE to stop telling me it is unused
-        current_list = roll_a_line()
+        current_list = await roll_a_line()
         big_list.append(current_list)
         total += sum(current_list + emp)
         line_total.append(sum(current_list))
@@ -68,3 +81,8 @@ def create_stats():
 '''
     #return(total, line_total, big_list_final)
     return big_list_final
+
+async def fetch_meme(sub_reddit):
+    sub_reddit = reddit.subreddit(sub_reddit).random()
+    image_url = sub_reddit.url
+    return image_url
