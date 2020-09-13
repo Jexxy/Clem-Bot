@@ -1,3 +1,3 @@
 # Clem-Bot
-A personal bot for DnD
+A personal bot for DnD.
 no.
