@@ -1,26 +1,26 @@
 import discord
 import utilities
+import Main
 import os
 from discord.ext import commands
-
-
 
 class Command(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
-
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print('Hello! You ready to do somthing with your life?')
     
-
     @commands.command()
     async def help(self, ctx):
         await ctx.send('''
+    **General:**
     --ping :: See if Clem is awake!
+    --meme :: Retrives a random image from r/memes
+    --dndmeme :: Retrives a random image from r/dndmemes
+    
+    **DND:**
     --roll (Amount of dice D number of sides on the dice) :: Clem likes the click clack noises!
     --stats :: Clem decides your characters fate!!!
+
+    **Ecnonomy:**
     --create :: Creates an account at clems bank!
     --add [mention the player] [amount to add]:: DM use Only!! Adds clemy moneys to a given users account. 
     --bal :: Clem will tell you the amount of moneys you have!!
@@ -91,7 +91,18 @@ class Command(commands.Cog):
             f.write("0")
             await ctx.send("Created!")
             f.close()
-    
+
+    @commands.command()
+    async def meme(self,ctx):
+        submission = Main.reddit.subreddit("memes").random()
+        image = submission.url
+        await ctx.send(image)
+
+    @commands.command()
+    async def dndmeme(self,ctx):
+        submission = Main.reddit.subreddit("dndmemes").random()
+        image = submission.url
+        await ctx.send(image)
 
 
 def setup(bot):
